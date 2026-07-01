@@ -5,19 +5,9 @@ import {
   createRootRouteWithContext,
   useRouter,
   HeadContent,
-  Scripts,
 } from "@tanstack/react-router";
 import { useEffect, useState, type ReactNode } from "react";
 import { Toaster } from "sonner";
-
-import appCss from "../styles.css?url";
-import "@fontsource/space-grotesk/400.css";
-import "@fontsource/space-grotesk/500.css";
-import "@fontsource/space-grotesk/600.css";
-import "@fontsource/space-grotesk/700.css";
-import "@fontsource/inter/400.css";
-import "@fontsource/inter/500.css";
-import "@fontsource/inter/600.css";
 import { SiteNav, SiteFooter } from "../components/site-chrome";
 import { onDownload as subscribeDownload } from "../lib/download-bus";
 
@@ -77,27 +67,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "twitter:card", content: "summary_large_image" },
       { name: "theme-color", content: "#0EA5E9" },
     ],
-    links: [{ rel: "stylesheet", href: appCss }],
   }),
-  shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
   errorComponent: ErrorComponent,
 });
-
-function RootShell({ children }: { children: ReactNode }) {
-  return (
-    <html lang="en" className="dark">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  );
-}
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
@@ -108,13 +82,16 @@ function RootComponent() {
   }, []);
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="relative min-h-screen">
-        <Toaster position="top-center" theme="dark" richColors />
-        <SiteNav />
-        <Outlet />
-        <SiteFooter />
-        <ComingSoonModal kind={comingSoon} onClose={() => setComingSoon(null)} />
-      </div>
+      <>
+        <HeadContent />
+        <div className="relative min-h-screen">
+          <Toaster position="top-center" theme="dark" richColors />
+          <SiteNav />
+          <Outlet />
+          <SiteFooter />
+          <ComingSoonModal kind={comingSoon} onClose={() => setComingSoon(null)} />
+        </div>
+      </>
     </QueryClientProvider>
   );
 }

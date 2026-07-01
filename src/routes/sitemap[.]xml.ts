@@ -1,17 +1,8 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type {} from "@tanstack/react-start";
 
-const BASE_URL = "";
-
+// Sitemap is served as a static file from public/sitemap.xml
+// This route exists only as a SPA placeholder — Cloudflare Pages
+// serves the static file directly before the SPA handles it.
 export const Route = createFileRoute("/sitemap.xml")({
-  server: {
-    handlers: {
-      GET: async () => {
-        const paths = ["/", "/privacy-policy", "/terms-and-conditions", "/medical-disclaimer", "/faq", "/contact"];
-        const urls = paths.map((p) => `  <url><loc>${BASE_URL}${p}</loc><changefreq>weekly</changefreq></url>`).join("\n");
-        const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>`;
-        return new Response(xml, { headers: { "Content-Type": "application/xml", "Cache-Control": "public, max-age=3600" } });
-      },
-    },
-  },
+  component: () => null,
 });
