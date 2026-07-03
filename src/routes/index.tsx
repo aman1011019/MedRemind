@@ -82,7 +82,7 @@ function Hero() {
             className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs tracking-wide text-muted-foreground mb-6"
           >
             <span className="h-1.5 w-1.5 rounded-full bg-teal animate-pulse" />
-            INTRODUCING MEDREMIND AI · v1.0
+            INTRODUCING MEDREMIND AI · v1.0.1
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }}
