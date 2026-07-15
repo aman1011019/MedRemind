@@ -79,17 +79,17 @@ function Hero() {
         <motion.div style={{ y, opacity }}>
           <motion.div
             initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}
-            className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs tracking-wide text-muted-foreground mb-6"
+          className="inline-flex items-center gap-2 glass rounded-full px-4 py-1.5 text-xs tracking-wide text-muted-foreground mb-6 animate-border-glow"
           >
-            <span className="h-1.5 w-1.5 rounded-full bg-teal animate-pulse" />
-            INTRODUCING MEDREMIND AI · v1.0.1
+            <span className="h-1.5 w-1.5 rounded-full bg-teal" style={{ animation: "badge-pulse 2s ease-out infinite" }} />
+            INTRODUCING MEDREMIND AI · v1.0.2
           </motion.div>
           <motion.h1
             initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.1 }}
-            className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.05]"
+          className="text-5xl sm:text-6xl lg:text-7xl font-display font-bold leading-[1.05]"
           >
             Your Personal{" "}
-            <span className="text-gradient">AI Health Companion</span>{" "}
+            <span className="text-gradient animate-glow-text">AI Health Companion</span>{" "}
             <span className="text-muted-foreground">that understands both body and mind.</span>
           </motion.h1>
           <motion.p
@@ -150,47 +150,50 @@ function FloatingPhone() {
       <div className="absolute inset-0 flex items-center justify-center">
         <div className="h-[420px] w-[420px] rounded-full blur-3xl opacity-60" style={{ background: "var(--gradient-mesh)" }} />
       </div>
-      <motion.div
-        animate={{ y: [0, -16, 0] }} transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-        className="relative"
-      >
+      <div className="animate-float relative" style={{ willChange: "transform" }}>
         <img src={heroPhone} alt="MEDREMIND AI on phone" width={420} height={520} className="relative z-10 drop-shadow-[0_30px_80px_rgba(14,165,233,0.4)] max-w-[420px] w-full" />
         <motion.div
           key={idx}
-          initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
+          initial={{ opacity: 0, y: 8, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0 }}
+          transition={{ duration: 0.4, ease: "easeOut" }}
           className="absolute -right-4 top-1/3 glass-strong rounded-2xl px-4 py-3 text-xs font-medium hidden sm:block"
         >
           <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Now showing</div>
-          <div className="mt-1 text-sm">{screens[idx]}</div>
+          <div className="mt-1 text-sm font-semibold">{screens[idx]}</div>
         </motion.div>
-        <motion.div
-          animate={{ y: [0, 10, 0] }} transition={{ duration: 4, repeat: Infinity, delay: 1 }}
-          className="absolute -left-6 top-1/4 glass-strong rounded-2xl px-3 py-2 text-xs hidden sm:flex items-center gap-2"
-        >
+        <div className="animate-float-slow absolute -left-6 top-1/4 glass-strong rounded-2xl px-3 py-2 text-xs hidden sm:flex items-center gap-2" style={{ willChange: "transform" }}>
           <HeartPulse className="h-4 w-4 text-teal" /> 72 BPM
-        </motion.div>
-        <motion.div
-          animate={{ y: [0, -10, 0] }} transition={{ duration: 5, repeat: Infinity, delay: 0.5 }}
-          className="absolute -left-2 bottom-20 glass-strong rounded-2xl px-3 py-2 text-xs hidden sm:flex items-center gap-2"
-        >
+        </div>
+        <div className="animate-float-med absolute -left-2 bottom-20 glass-strong rounded-2xl px-3 py-2 text-xs hidden sm:flex items-center gap-2" style={{ willChange: "transform" }}>
           <Droplets className="h-4 w-4 text-sky-400" /> 1.8L today
-        </motion.div>
-      </motion.div>
+        </div>
+      </div>
     </motion.div>
   );
 }
 
 function ParticleField() {
-  const dots = Array.from({ length: 28 });
+  // Pure CSS particles — zero JS overhead, no layout thrashing
+  const particles = [
+    { l: 8,  t: 15, d: 0,    s: 5 }, { l: 18, t: 72, d: 0.8, s: 7 },
+    { l: 27, t: 38, d: 1.4, s: 6 }, { l: 35, t: 85, d: 0.3, s: 4 },
+    { l: 45, t: 22, d: 2.1, s: 8 }, { l: 55, t: 60, d: 0.6, s: 5 },
+    { l: 63, t: 10, d: 1.9, s: 7 }, { l: 72, t: 48, d: 0.2, s: 6 },
+    { l: 80, t: 78, d: 1.1, s: 4 }, { l: 90, t: 33, d: 2.5, s: 8 },
+    { l: 14, t: 55, d: 0.5, s: 6 }, { l: 50, t: 90, d: 1.7, s: 5 },
+  ];
   return (
-    <div className="absolute inset-0 -z-10 overflow-hidden">
-      {dots.map((_, i) => (
-        <motion.span
+    <div className="particle-field absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+      {particles.map((p, i) => (
+        <span
           key={i}
-          className="absolute h-1 w-1 rounded-full bg-white/40"
-          style={{ left: `${(i * 37) % 100}%`, top: `${(i * 53) % 100}%` }}
-          animate={{ y: [0, -30, 0], opacity: [0.2, 0.8, 0.2] }}
-          transition={{ duration: 4 + (i % 5), repeat: Infinity, delay: i * 0.2 }}
+          className="particle"
+          style={{
+            left: `${p.l}%`,
+            top: `${p.t}%`,
+            animationDelay: `${p.d}s`,
+            animationDuration: `${p.s}s`,
+          } as React.CSSProperties}
         />
       ))}
     </div>
